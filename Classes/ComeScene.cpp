@@ -1,6 +1,7 @@
 #include"ComeScene.h"
 #include"ui\UIImageView.h"
 #include"HelloWorldScene.h"
+#include"PlayScene.h"
 USING_NS_CC;
 Scene * ComeScene::createScene()
 {
@@ -42,5 +43,5 @@ bool ComeScene::init()
 }
 void ComeScene::startGameEvt(Ref * Sender)
 {
-	Director::getInstance()->replaceScene(HelloWorld::createScene());
+	Director::getInstance()->replaceScene(PlayScene::createScene());
 }
