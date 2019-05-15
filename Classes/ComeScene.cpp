@@ -19,10 +19,17 @@ bool ComeScene::init()
 		return false;
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
-	auto imgview = ui::ImageView::create("comeBkg.jpg");
+	/*auto imgview = ui::ImageView::create("playScene.jpg");
 	imgview->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+	imgview->setContentSize(visibleSize);
 	imgview->setSize(visibleSize);
-	this->addChild(imgview);
+	this->addChild(imgview)*/;
+
+	Layout * layout = Layout::create();
+	layout->setBackGroundImage("playScene.jpeg");
+	layout->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+	layout->setContentSize(visibleSize);
+	addChild(layout, -5);
 	//
 	auto myLabel = Label::createWithSystemFont("DouDou Play", "Arial", 40);
 	myLabel->setPosition(Vec2(visibleSize.width / 2 - 50, visibleSize.height / 2 + 200));
@@ -39,13 +46,23 @@ bool ComeScene::init()
 	//About
 	CCMenuItemLabel* mLabel2 = CCMenuItemLabel::create(startLabel, [this, visibleSize](Ref * Sender){
 		Layout* 	layout = Layout::create();
+
+		layout->setTouchEnabled(true);
+		auto touchevt = EventListenerTouchOneByOne::create();
+		touchevt->onTouchBegan = [=](Touch * touch, Event*event)
+		{
+			layout->getParent()->removeChild(layout);
+			return true;
+		};
+		layout->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchevt, layout);
+		//
 		layout->setSize(Size(visibleSize.width, visibleSize.height));
 		//横向排列，这里类似Android里的线性布局
 		//layout->setLayoutType(LAYOUT_RELATIVE);
 		/*以图片为背景*/
 		layout->setBackGroundImageScale9Enabled(true);
 		layout->setBackGroundImage("green_edit.png");
-		layout->setPosition(Point(50, 0));
+		layout->setPosition(Vec2(50, 0));
 		addChild(layout);
 
 		ListView* listView = ListView::create();
@@ -55,8 +72,9 @@ bool ComeScene::init()
 		listView->setBounceEnabled(true);
 		listView->setBackGroundImage("green_edit.png");
 		listView->setBackGroundImageScale9Enabled(true);
-		listView->setSize(Size(480, 260));
-		listView->setPosition(Point(visibleSize.width / 2.0f, visibleSize.height / 2.0f));
+		listView->setSize(Size(layout->getContentSize().width - 100, layout->getContentSize().height / 2));
+		//listView->setPosition(ccp(0, 0));  //父级的左下角坐标
+		listView->setPosition(ccp(0, 50));
 		//	listView->addEventListenerListView(this, listvieweventselector(LayoutTest::selectedItemEvent));
 		layout->addChild(listView);
 		//create model
@@ -66,6 +84,7 @@ bool ComeScene::init()
 		Layout* default_item = Layout::create();
 		default_item->setTouchEnabled(true);
 		default_item->setSize(default_button->getSize());
+		//default_item->setPosition(ccp(0, 0));
 		default_button->setPosition(Point(default_item->getSize().width / 2.0f, default_item->getSize().height / 2.0f));
 		default_item->addChild(default_button);
 		//set model

@@ -8,8 +8,10 @@ class PlayScene :public cocos2d::Layer
 {
 private:
 	cocos2d::Sprite * player;
-	
+	int score = 0;
+	cocos2d::Label * labelScore;
 	std::list<cocos2d::Sprite*> * GoodsList;//掉落物品集合
+	std::list<cocos2d::Sprite*> * daodan;//导弹集合
 public:
 	cocos2d::ui::LoadingBar * loadingbar0;
 	static cocos2d::Scene * createScene();
@@ -18,6 +20,9 @@ public:
 	bool addWorldEdge();
 	void Down(float dt);
 	void childThreadPlayContactBGM();
+	//显示排行列表
+	void showPHList(cocos2d::Ref * pSender);
+	void JudgeTimer(float dt);
 	CREATE_FUNC(PlayScene);
 };
 #endif
